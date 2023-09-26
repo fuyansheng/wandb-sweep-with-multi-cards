@@ -17,7 +17,7 @@ import socket
 wandb.login()
 
 
-sweep_id = 'ohp2dwod'
+sweep_id = 'test'
 world_size = 2
 num_gpus = 2
 #
@@ -68,7 +68,5 @@ def main():
 
 if __name__ == '__main__':
 
-    # 启动多个训练进程
-    # mp.spawn(multi_card_run, args=(num_gpus,), nprocs=num_gpus)
     wandb.agent(sweep_id, main, project='FYS_test_multi_gpu')
 
