@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,5'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0，1'
 import sys
 import argparse
 import random
@@ -20,15 +20,15 @@ from testing_multi import train
 #from multi_together_train_pipeline import model_pipeline
 
 
-sweep_id = 'ohp2dwod'
+sweep_id = 'test'
 num_gpus = 2
 world_size = 2
 
 def parse(args):
     parser = argparse.ArgumentParser(
         description='wandb_usage', formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--team_name", type=str, default='data-mining-group')
-    parser.add_argument("--project_name", type=str, default="FYS_test_multi_gpu")
+    parser.add_argument("--team_name", type=str, default='')
+    parser.add_argument("--project_name", type=str, default="")
     parser.add_argument("--experiment_name", type=str,default='test_sweep')
     parser.add_argument("--scenario_name", type=str,default='test_sweeping')
     parser.add_argument("--wandb_log_path", type=str, default="../../wandb_results/")
@@ -85,16 +85,6 @@ def find_free_port():
     sock.close()
     # 返回闲置端口号
     return port
-    # while True:
-    #     port = random.randint(1024, 65535)  # 随机生成一个端口号
-    #     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #     try:
-    #         s.bind(('localhost', port))  # 尝试绑定端口
-    #         s.close()
-    #         return port
-    #     except socket.error:
-    #         continue
-
 
 
 def main():
@@ -120,17 +110,6 @@ def main():
         args['config_file_name'] = unique_filename
         args['world_size'] = world_size
         args['ddp_address'] = ddp_add
-
-        # parse = argparse.ArgumentParser()
-        # # 节点数/主机数
-        # # parse.add_argument('-n', '--nodes', default=1, type=int, help='the number of nodes/computer')
-        # # parse.add_argument('-wz', '--world_size', default=2, type=int, help='the number of nodes/computer')
-        # # parse.add_argument('-fn', '--config_file_name', default='name', type=str, help='')
-        # args = parse.parse_args()
-        # args.config_file_name = unique_filename
-        # args.world_size = world_size
-        # print(args)
-        # args.config = config
 
         # 启动多进程训练
         mp.spawn(
