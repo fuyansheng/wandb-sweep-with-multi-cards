@@ -7,14 +7,14 @@ from pathlib import Path
 import wandb
 import launchpad as lp
 
-#from config import sweep_config
-from multi_together_train_pipeline import model_pipeline
+
+from pipeline import pipeline  #此处为了举例，实际使用时该函数要自行添加引用
 
 def parse(args):
     parser = argparse.ArgumentParser(
         description='wandb_usage', formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--team_name", type=str, default='data-mining-group')
-    parser.add_argument("--project_name", type=str, default="FYS_using_multi_hitter_testing_multi_pross_gpu")
+    parser.add_argument("--team_name", type=str, default='')
+    parser.add_argument("--project_name", type=str, default=")
     parser.add_argument("--experiment_name", type=str,default='test_sweep')
     parser.add_argument("--scenario_name", type=str,default='test_sweeping')
     parser.add_argument("--wandb_log_path", type=str, default="../../wandb_results/")
@@ -42,20 +42,17 @@ def make_program(sweep_worker_num,args,sweep_id):
     return program
 
 def set_wandb(all_args):
-    # run_dir = Path("../../../wandb_results") / all_args.project_name / all_args.experiment_name
-    # if not run_dir.exists():
-    #     os.makedirs(str(run_dir))
 
     os.environ["WANDB_ENTITY"] = all_args.team_name
     os.environ["WANDB_PROJECT"] = all_args.project_name
-    # os.environ["WANDB_DIR"] = str(run_dir)
+
 
 
 def test_sweep(args):
     all_args = parse(args)
     set_wandb(all_args)
 
-    sweep_id = '37aj852e'
+    sweep_id = 'test'
     program = make_program(all_args.sweep_worker_num,args,sweep_id)
     lp.launch(program, launch_type='local_mp')
 
